@@ -7,7 +7,7 @@
 (equal? I-will-behave true)
 
 ; 2
-; In progress
+; Done
 
 ; 3 - Define near
 
@@ -44,4 +44,36 @@
 (equal? 0 (count-xs '()))
 
 
-; 5 
+;; 5)
+;; Define an ascending? function that determines whether a list of numbers is sorted in ascending order.
+;; This means that each element is smaller than or equal to the next one in the list. Again, make sure
+;; that you write a proper contract, purpose statement, and tests.
+;;
+(define (ascending? list-of-numbers)
+  (if (<= (length list-of-numbers) 1) true
+        (and (<= (first list-of-numbers) (first (rest list-of-numbers)))
+             (ascending? (rest list-of-numbers)))))
+
+(check-expect true (ascending? '()))
+(check-expect true (ascending? (list 1000)))
+(check-expect true (ascending? (list 1 2 3)))
+(check-expect true (ascending? (list 5 8 100)))
+(check-expect false (ascending? (list 1 2 3 0)))
+
+;; 6
+;; Finally, implement a zip2 function that does the following:
+;; * It consumes two arguments that are lists of equal length, say (Listof A) and (Listof B)
+;;   for some types A and B. (Note that you cannot express the fact that they are equal-length
+;;   lists with the way we write contracts, so make sure you mention that in the purpose statement.)
+;; * The result is a list that contains two-element lists from the first and the second lists respectively.
+;;   Use (List ? ?) to specify “a two-item list of ? and ?” in your contract.
+;; You can assume here too that the input is always valid.
+
+(define (zip2 list1 list2)
+  (if (empty? list1) '()
+      (list (list (first list1) (first list2)) (zip2 (rest list1) (rest list2)))))
+
+(check-expect (zip2 '() '()) '())
+(check-expect (zip2 '(1) '(2)) '('(1 2)))
+(check-expect (zip2 '(1 3 5) '(2 4 6)) (list '(1 2) '(3 4) '(5 6)))
+(check-expect (zip2 (list 1 2 3) (list 'a 'b 'c)) (list (list 1 'a) (list 2 'b) (list 3 'c)))
