@@ -26,15 +26,17 @@
 
 ; Tests for get-dif
 
-(equal? 1 (get-dif 3 2))
-(equal? 5 (get-dif 3 8))
-(equal? 20 (get-dif 21 1))
-(equal? 4 (get-dif 2 -2))
+(check-expect (get-dif 3  2)   1)
+(check-expect (get-dif 3  8)   5)
+(check-expect (get-dif 21 1)  20)
+(check-expect (get-dif 2 -2)   4)
+(check-expect (get-dif 2  2)   0)
+(check-expect (get-dif 0  0)   0)
 
 
-(near? 1 -1 1)
-(not (near? 2 -2 2))
-(not (near? 0 2 3))
+(check-expect (near?       1 -1 1)  true)
+(check-expect (near? 2 -2  2)      false)
+(check-expect (near? 0  2  3)      false)
 
 ; 4 - Define count-xs
 
@@ -42,13 +44,15 @@
 ; Given a list of symbols, list-of-symbols, count the number of ocurrences
 ; of the symbol x in the list
 (define (count-xs list-of-symbols)
-  (if (empty? list-of-symbols) 0
-  (+ (if (equal? 'x (first list-of-symbols)) 1 0) (count-xs (rest list-of-symbols)))))
+  (if (empty? list-of-symbols)
+       0
+       (+ (if (equal? 'x (first list-of-symbols)) 1 0)
+          (count-xs (rest list-of-symbols)))))
 
-(equal? 1 (count-xs '(x)))
-(equal? 3 (count-xs '(a b c d x ed x a x)))
-(equal? 0 (count-xs '(a b c d 1 2 3)))
-(equal? 0 (count-xs '()))
+(check-expect (count-xs '(x)) 1)
+(check-expect (count-xs '(a b c d x ed x a x)) 3)
+(check-expect (count-xs '(a b c d 1 2 3)) 0)
+(check-expect (count-xs '()) 0)
 
 
 ; 5) Define an ascending? 
@@ -73,17 +77,32 @@
 ; Given two lists of any value type of *equal length*, return a list that
 ; contains two-elements lists from the first and second lists respectively.
 (define (zip2 list1 list2)
-  (if (empty? list1) '()
-      (cons (list (first list1) (first list2)) (zip2 (rest list1) (rest list2)))))
+  (if (empty? list1)
+       '()
+      (cons (list (first list1) (first list2))
+            (zip2 (rest list1) (rest list2)))))
 
-
-
-(check-expect (zip2 '() '()) '())
-(check-expect (zip2 '(1) '(2)) (list '(1 2)))
-(check-expect (zip2 '(1 3 5) '(2 4 6)) (list '(1 2) '(3 4) '(5 6)))
-(check-expect (zip2 (list 1 2 3) (list 'a 'b 'c)) (list (list 1 'a) (list 2 'b) (list 3 'c)))
+(check-expect (zip2 '() '())
+              '())
+(check-expect (zip2 '(1) '(2))
+              (list '(1 2)))
+(check-expect (zip2 '(1 3 5) '(2 4 6))
+              (list '(1 2) '(3 4) '(5 6)))
+(check-expect (zip2 (list 1 2 3)
+                    (list 'a 'b 'c))
+              (list (list 1 'a)
+                    (list 2 'b)
+                    (list 3 'c)))
 
 ; 7
-;
+; The number assigned to my picture
 (define my-picture 39)
 (check-expect my-picture 39)
+
+(define my-other-pictures '())
+(check-expect (empty? my-other-pictures) true)
+
+; 8 Estimated amount of minutes I spent on this homework
+
+(define minutes-spent 150)
+(check-expect minutes-spent 150)
