@@ -54,7 +54,9 @@
     [(Add l r) (+ (eval l) (eval r))]
     [(Sub l r) (- (eval l) (eval r))]
     [(Mul l r) (* (eval l) (eval r))]
-    [(Div l r) (/ (eval l) (eval r))]))
+    [(Div l r) (if (zero? (eval r))
+                   999
+                   (/ (eval l) (eval r)))]))
 
 (: run : String -> Number)
 ;; evaluate an AE program contained in a string
@@ -65,3 +67,8 @@
 (test (run "3") => 3)
 (test (run "{3 + 4}") => 7)
 (test (run "{{3 - 4} + 7}") => 6)
+(test (run "{3 / 0}") => 999)
+(test (run "{0 / 0}") => 999)
+(test (run "{1 / {5 - {2 + 3}}}") => 999)
+
+;; 1.C
